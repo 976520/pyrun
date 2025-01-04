@@ -84,7 +84,7 @@ def execute_c(code):
             return Response({
                 'output': '',
                 'error': 'Execution timed out'
-            }, status=400)
+            }, status=408)
 
 def execute_java(code):
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -124,7 +124,7 @@ def execute_java(code):
             return Response({
                 'output': '',
                 'error': 'Execution timed out'
-            }, status=400)
+            }, status=408)  
 
 def execute_kotlin(code):
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -164,11 +164,10 @@ def execute_kotlin(code):
             return Response({
                 'output': '',
                 'error': 'Execution timed out'
-            }, status=400)
+            }, status=408)
 
 def execute_typescript(code):
     with tempfile.TemporaryDirectory() as tmp_dir:
-        # JavaScript 코드인 경우 직접 실행
         if language == 'javascript':
             js_path = os.path.join(tmp_dir, 'main.js')
             with open(js_path, 'w') as f:
@@ -191,15 +190,13 @@ def execute_typescript(code):
                 return Response({
                     'output': '',
                     'error': 'Execution timed out'
-                }, status=400)
+                }, status=408)
         
-        # TypeScript 코드인 경우 컴파일 후 실행
         src_path = os.path.join(tmp_dir, 'main.ts')
         with open(src_path, 'w') as f:
             f.write(code)
         
         try:
-            # TypeScript 컴파일
             compile_process = subprocess.run(
                 ['tsc', src_path, '--outDir', tmp_dir],
                 capture_output=True,
@@ -212,7 +209,6 @@ def execute_typescript(code):
                     'error': compile_process.stderr
                 }, status=400)
             
-            # 컴파일된 JavaScript 실행
             run_process = subprocess.run(
                 ['node', os.path.join(tmp_dir, 'main.js')],
                 capture_output=True,
@@ -229,7 +225,7 @@ def execute_typescript(code):
             return Response({
                 'output': '',
                 'error': 'Execution timed out'
-            }, status=400)
+            }, status=408)
 
 def execute_cpp(code):
     with tempfile.TemporaryDirectory() as tmp_dir:
@@ -268,4 +264,4 @@ def execute_cpp(code):
             return Response({
                 'output': '',
                 'error': 'Execution timed out'
-            }, status=400)
+            }, status=408)
