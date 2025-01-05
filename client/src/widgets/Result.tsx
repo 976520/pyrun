@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Colors } from "../shared/color";
+import { Colors } from "../shared/Color";
 
 const ResultOutput = styled.div`
   width: 100%;

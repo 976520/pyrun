@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Colors } from "../shared/color";
+import { Colors } from "../shared/Color";
 
 export type Language = "python" | "c" | "java";
 
