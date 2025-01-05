@@ -13,6 +13,7 @@ const CodespaceContainer = styled.div`
   border-radius: 4px;
   padding: 0;
   margin: 20px auto;
+  overflow: hidden;
 `;
 
 const LineNumbers = styled.div`
@@ -32,19 +33,35 @@ const LineNumbers = styled.div`
   user-select: none;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
+  overflow: hidden;
 `;
 
-const CodeInput = styled.textarea`
+const LineNumbersContent = styled.div`
+  position: absolute;
+  top: 12px;
+  right: 10px;
+  left: 10px;
+`;
+
+const CommonCodeStyles = () => `
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   min-height: 300px;
-  padding: 12px 20px 12px 55px;
+  padding: 12px 12px 12px 70px;
   font-family: "Hack", "Consolas", monospace;
   font-size: 14px;
   line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  box-sizing: border-box;
+`;
+
+const CodeInput = styled.textarea`
+  ${CommonCodeStyles()}
+  padding: 12px 20px 12px 70px;
   border: 0px;
   border-radius: 4px;
   resize: vertical;
@@ -52,9 +69,7 @@ const CodeInput = styled.textarea`
   color: transparent;
   caret-color: ${Colors.text.primary};
   tab-size: 2;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  box-sizing: border-box;
+  overflow-y: auto;
 
   &::placeholder {
     color: ${Colors.text.placeholder};
@@ -66,23 +81,11 @@ const CodeInput = styled.textarea`
 `;
 
 const CodeDisplay = styled.pre`
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  min-height: 300px;
-  padding: 12px 12px 12px 55px;
+  ${CommonCodeStyles()}
   margin: 0;
-  font-family: "Hack", "Consolas", monospace;
-  font-size: 14px;
-  line-height: 1.5;
   pointer-events: none;
-  overflow: hidden;
-  white-space: pre-wrap;
-  word-wrap: break-word;
+  overflow-y: auto;
   background: transparent;
-  box-sizing: border-box;
   color: ${Colors.text.primary};
 
   & .token.keyword {
@@ -119,6 +122,26 @@ interface CodespaceProps {
 export default function Codespace({ value = "", onChange }: CodespaceProps) {
   const [code, setCode] = useState(value);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const displayRef = useRef<HTMLPreElement>(null);
+
+  const syncScroll = (e: React.UIEvent<HTMLElement>) => {
+    const target = e.target as HTMLElement;
+    if (textareaRef.current && displayRef.current) {
+      if (target === textareaRef.current) {
+        displayRef.current.scrollTop = target.scrollTop;
+        const lineNumbers = document.querySelector<HTMLElement>(".line-numbers-content");
+        if (lineNumbers) {
+          lineNumbers.style.transform = `translateY(-${target.scrollTop}px)`;
+        }
+      } else if (target === displayRef.current) {
+        textareaRef.current.scrollTop = target.scrollTop;
+        const lineNumbers = document.querySelector<HTMLElement>(".line-numbers-content");
+        if (lineNumbers) {
+          lineNumbers.style.transform = `translateY(-${target.scrollTop}px)`;
+        }
+      }
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newCode = e.target.value;
@@ -155,16 +178,19 @@ export default function Codespace({ value = "", onChange }: CodespaceProps) {
 
   return (
     <CodespaceContainer>
-      <LineNumbers>{renderLineNumbers()}</LineNumbers>
+      <LineNumbers>
+        <LineNumbersContent className="line-numbers-content">{renderLineNumbers()}</LineNumbersContent>
+      </LineNumbers>
       <CodeInput
         ref={textareaRef}
         value={code}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
+        onScroll={syncScroll}
         placeholder="코드 입력"
         spellCheck={false}
       />
-      <CodeDisplay dangerouslySetInnerHTML={{ __html: highlightCode(code) }} />
+      <CodeDisplay ref={displayRef} onScroll={syncScroll} dangerouslySetInnerHTML={{ __html: highlightCode(code) }} />
     </CodespaceContainer>
   );
 }
