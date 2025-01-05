@@ -1,13 +1,8 @@
 import styled from "styled-components";
 import { Colors } from "../shared/color";
 
-const ResultContainer = styled.div`
-  width: 100%;
-  padding: 20px;
-`;
-
 const ResultOutput = styled.div`
-  width: 100%;
+  width: 97%;
   min-height: 200px;
   padding: 12px;
   font-family: monospace;
@@ -27,8 +22,8 @@ interface ResultProps {
 
 export default function Result({ output = "" }: ResultProps) {
   return (
-    <ResultContainer>
+    <>
       <ResultOutput>{output}</ResultOutput>
-    </ResultContainer>
+    </>
   );
 }

@@ -3,7 +3,7 @@ import { Colors } from "../shared/color";
 import styled from "styled-components";
 
 const CodespaceContainer = styled.div`
-  width: 100%;
+  width: 95%;
   padding: 20px;
   position: relative;
   background-color: ${Colors.background.primary};
@@ -77,7 +77,6 @@ export default function Codespace({ value = "", onChange }: CodespaceProps) {
       setCode(newCode);
       onChange?.(newCode);
 
-      // 커서 위치 조정
       setTimeout(() => {
         if (textareaRef.current) {
           textareaRef.current.selectionStart = textareaRef.current.selectionEnd = start + 2;
