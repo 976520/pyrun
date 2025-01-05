@@ -64,7 +64,7 @@ const CodeInput = styled.textarea`
   padding: 12px 20px 12px 70px;
   border: 0px;
   border-radius: 4px;
-  resize: vertical;
+  resize: none;
   background-color: transparent;
   color: transparent;
   caret-color: ${Colors.text.primary};

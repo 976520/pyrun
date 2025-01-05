@@ -3,8 +3,12 @@ import { Colors } from "../shared/Color";
 import { PythonIcon } from "../shared/PythonIcon";
 import { CIcon } from "../shared/CIcon";
 import { JavaIcon } from "../shared/JavaIcon";
+import { KotlinIcon } from "../shared/KotlinIcon";
+import { TypescriptIcon } from "../shared/TypescriptIcon";
+import { CppIcon } from "../shared/CppIcon";
+import { JavascriptIcon } from "../shared/JavascriptIcon";
 
-export type Language = "python" | "c" | "java";
+export type Language = "python" | "c" | "java" | "kotlin" | "typescript" | "cpp" | "javascript";
 
 const Container = styled.div`
   display: flex;
@@ -47,14 +51,26 @@ interface LanguageSelectProps {
 export default function LanguageSelect({ value, onChange }: LanguageSelectProps) {
   return (
     <Container>
-      <LanguageButton active={value === "python"} onClick={() => onChange("python")}>
-        <PythonIcon />
-      </LanguageButton>
       <LanguageButton active={value === "c"} onClick={() => onChange("c")}>
         <CIcon />
       </LanguageButton>
+      <LanguageButton active={value === "cpp"} onClick={() => onChange("cpp")}>
+        <CppIcon />
+      </LanguageButton>
+      <LanguageButton active={value === "python"} onClick={() => onChange("python")}>
+        <PythonIcon />
+      </LanguageButton>
       <LanguageButton active={value === "java"} onClick={() => onChange("java")}>
         <JavaIcon />
+      </LanguageButton>
+      <LanguageButton active={value === "kotlin"} onClick={() => onChange("kotlin")}>
+        <KotlinIcon />
+      </LanguageButton>
+      <LanguageButton active={value === "javascript"} onClick={() => onChange("javascript")}>
+        <JavascriptIcon />
+      </LanguageButton>
+      <LanguageButton active={value === "typescript"} onClick={() => onChange("typescript")}>
+        <TypescriptIcon />
       </LanguageButton>
     </Container>
   );

@@ -20,8 +20,8 @@ export const JavaIcon: React.FC = () => {
           y2="43.318"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stop-color="#5c65d6" />
-          <stop offset=".999" stop-color="#464eb0" />
+          <stop offset="0" stopColor="#5c65d6" />
+          <stop offset=".999" stopColor="#464eb0" />
         </linearGradient>
         <path
           fill="url(#P9ujQJgz7XN9Qbny9S64Ha)"
@@ -35,8 +35,8 @@ export const JavaIcon: React.FC = () => {
           y2="44.196"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stop-color="#5c65d6" />
-          <stop offset=".999" stop-color="#464eb0" />
+          <stop offset="0" stopColor="#5c65d6" />
+          <stop offset=".999" stopColor="#464eb0" />
         </linearGradient>
         <path
           fill="url(#P9ujQJgz7XN9Qbny9S64Hb)"
@@ -50,8 +50,8 @@ export const JavaIcon: React.FC = () => {
           y2="45.14"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stop-color="#5c65d6" />
-          <stop offset=".999" stop-color="#464eb0" />
+          <stop offset="0" stopColor="#5c65d6" />
+          <stop offset=".999" stopColor="#464eb0" />
         </linearGradient>
         <path
           fill="url(#P9ujQJgz7XN9Qbny9S64Hc)"
@@ -65,8 +65,8 @@ export const JavaIcon: React.FC = () => {
           y2="45.712"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stop-color="#5c65d6" />
-          <stop offset=".999" stop-color="#464eb0" />
+          <stop offset="0" stopColor="#5c65d6" />
+          <stop offset=".999" stopColor="#464eb0" />
         </linearGradient>
         <path
           fill="url(#P9ujQJgz7XN9Qbny9S64Hd)"
@@ -80,8 +80,8 @@ export const JavaIcon: React.FC = () => {
           y2="45.197"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stop-color="#5c65d6" />
-          <stop offset=".999" stop-color="#464eb0" />
+          <stop offset="0" stopColor="#5c65d6" />
+          <stop offset=".999" stopColor="#464eb0" />
         </linearGradient>
         <path
           fill="url(#P9ujQJgz7XN9Qbny9S64He)"

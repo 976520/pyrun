@@ -12,25 +12,24 @@ import contextlib
 @csrf_exempt
 def execute_code(request):
     code = request.data.get('code', '')
-    language = request.data.get('language', 'python')
-    
-    try:
-        if language == 'python':
-            return execute_python(code)
-        elif language == 'c':
-            return execute_c(code)
-        elif language == 'java':
-            return execute_java(code)
-        else:
-            return Response({
-                'output': '',
-                'error': f'Unsupported language: {language}'
-            }, status=400)
-            
-    except Exception as e:
+    language = request.data.get('language', '')
+
+    if language == 'python':
+        return execute_python(code)
+    elif language == 'c':
+        return execute_c(code)
+    elif language == 'java':
+        return execute_java(code)
+    elif language == 'kotlin':
+        return execute_kotlin(code)
+    elif language in ['typescript', 'javascript']:
+        return execute_typescript(code)
+    elif language == 'cpp':
+        return execute_cpp(code)
+    else:
         return Response({
             'output': '',
-            'error': str(e)
+            'error': f'Unsupported language: {language}'
         }, status=400)
 
 def execute_python(code):
@@ -111,6 +110,150 @@ def execute_java(code):
             
             run_process = subprocess.run(
                 ['java', '-cp', tmp_dir, 'Main'],
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            
+            return Response({
+                'output': run_process.stdout,
+                'error': run_process.stderr if run_process.returncode != 0 else None
+            })
+            
+        except subprocess.TimeoutExpired:
+            return Response({
+                'output': '',
+                'error': 'Execution timed out'
+            }, status=400)
+
+def execute_kotlin(code):
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        src_path = os.path.join(tmp_dir, 'Main.kt')
+        with open(src_path, 'w') as f:
+            if 'fun main' not in code:
+                code = f'fun main() {{ {code} }}'
+            f.write(code)
+        
+        try:
+            compile_process = subprocess.run(
+                ['kotlinc', src_path, '-d', tmp_dir],
+                capture_output=True,
+                text=True
+            )
+            
+            if compile_process.returncode != 0:
+                return Response({
+                    'output': '',
+                    'error': compile_process.stderr
+                }, status=400)
+            
+            run_process = subprocess.run(
+                ['kotlin', 'MainKt'],
+                cwd=tmp_dir,
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            
+            return Response({
+                'output': run_process.stdout,
+                'error': run_process.stderr if run_process.returncode != 0 else None
+            })
+            
+        except subprocess.TimeoutExpired:
+            return Response({
+                'output': '',
+                'error': 'Execution timed out'
+            }, status=400)
+
+def execute_typescript(code):
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        # JavaScript 코드인 경우 직접 실행
+        if language == 'javascript':
+            js_path = os.path.join(tmp_dir, 'main.js')
+            with open(js_path, 'w') as f:
+                f.write(code)
+            
+            try:
+                run_process = subprocess.run(
+                    ['node', js_path],
+                    capture_output=True,
+                    text=True,
+                    timeout=5
+                )
+                
+                return Response({
+                    'output': run_process.stdout,
+                    'error': run_process.stderr if run_process.returncode != 0 else None
+                })
+                
+            except subprocess.TimeoutExpired:
+                return Response({
+                    'output': '',
+                    'error': 'Execution timed out'
+                }, status=400)
+        
+        # TypeScript 코드인 경우 컴파일 후 실행
+        src_path = os.path.join(tmp_dir, 'main.ts')
+        with open(src_path, 'w') as f:
+            f.write(code)
+        
+        try:
+            # TypeScript 컴파일
+            compile_process = subprocess.run(
+                ['tsc', src_path, '--outDir', tmp_dir],
+                capture_output=True,
+                text=True
+            )
+            
+            if compile_process.returncode != 0:
+                return Response({
+                    'output': '',
+                    'error': compile_process.stderr
+                }, status=400)
+            
+            # 컴파일된 JavaScript 실행
+            run_process = subprocess.run(
+                ['node', os.path.join(tmp_dir, 'main.js')],
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            
+            return Response({
+                'output': run_process.stdout,
+                'error': run_process.stderr if run_process.returncode != 0 else None
+            })
+            
+        except subprocess.TimeoutExpired:
+            return Response({
+                'output': '',
+                'error': 'Execution timed out'
+            }, status=400)
+
+def execute_cpp(code):
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        src_path = os.path.join(tmp_dir, 'main.cpp')
+        exe_path = os.path.join(tmp_dir, 'main')
+        
+        with open(src_path, 'w') as f:
+            f.write(code)
+        
+        try:
+            compile_process = subprocess.run(
+                ['g++', src_path, '-o', exe_path],
+                capture_output=True,
+                text=True
+            )
+            
+            if compile_process.returncode != 0:
+                return Response({
+                    'output': '',
+                    'error': compile_process.stderr
+                }, status=400)
+            
+            run_process = subprocess.run(
+                [exe_path],
                 capture_output=True,
                 text=True,
                 timeout=5

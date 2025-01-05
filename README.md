@@ -6,7 +6,13 @@
 pip install -r requirements.txt
 ```
 
-해주고
+로 패키지 깔고
+
+```shell
+source .venv/Scripts/activate
+```
+
+로 가상환경 키고
 
 ```shell
 python manage.py runserver
