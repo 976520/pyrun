@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Colors } from "../shared/color";
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -17,7 +18,7 @@ const StyledButton = styled.button<Pick<ButtonProps, "variant">>`
   ${({ variant = "primary" }) =>
     variant === "primary"
       ? `
-    background-color: #528bff;
+    background-color: ${Colors.accent.blue};
     color: white;
     border: none;
     
@@ -27,11 +28,11 @@ const StyledButton = styled.button<Pick<ButtonProps, "variant">>`
     `
       : `
     background-color: transparent;
-    color: #528bff;
-    border: 1px solid #528bff;
+    color: ${Colors.accent.blue};
+    border: 1px solid ${Colors.accent.blue};
     
     &:hover:not(:disabled) {
-      background-color: rgba(82, 139, 255, 0.1);
+      background-color: rgba(${Colors.accent.blue}, 0.1);
     }
     `}
 

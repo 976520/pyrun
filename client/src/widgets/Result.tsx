@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Colors } from "../shared/color";
 
 const ResultContainer = styled.div`
   width: 100%;
@@ -12,10 +13,10 @@ const ResultOutput = styled.div`
   font-family: monospace;
   font-size: 14px;
   line-height: 1.5;
-  border: 1px solid #181a1f;
+  border: 1px solid ${Colors.border.primary};
   border-radius: 4px;
-  background-color: #282c34;
-  color: #abb2bf;
+  background-color: ${Colors.background.primary};
+  color: ${Colors.text.primary};
   white-space: pre-wrap;
   overflow-y: auto;
 `;

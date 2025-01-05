@@ -1,29 +1,32 @@
 import { useState, useRef, KeyboardEvent } from "react";
+import { Colors } from "../shared/color";
 import styled from "styled-components";
 
 const CodespaceContainer = styled.div`
   width: 100%;
   padding: 20px;
   position: relative;
-  background-color: #282c34;
+  background-color: ${Colors.background.primary};
   border-radius: 4px;
 `;
 
 const LineNumbers = styled.div`
   position: absolute;
-  left: 20px;
-  top: 20px;
-  bottom: 20px;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
   width: 40px;
-  padding: 12px 0;
-  background-color: #21252b;
-  border-right: 1px solid #181a1f;
-  color: #495162;
+  padding-right: 10px;
+  padding-top: 32px;
+  background-color: ${Colors.background.secondary};
+  border-right: 1px solid ${Colors.border.primary};
+  color: ${Colors.text.secondary};
   font-family: monospace;
   font-size: 14px;
   line-height: 1.5;
   text-align: right;
   user-select: none;
+  border-radius: 4px;
 `;
 
 const CodeInput = styled.textarea`
@@ -36,12 +39,12 @@ const CodeInput = styled.textarea`
   border: 0px;
   border-radius: 4px;
   resize: vertical;
-  background-color: #282c34;
-  color: #abb2bf;
+  background-color: ${Colors.background.primary};
+  color: ${Colors.text.primary};
   tab-size: 2;
 
   &::placeholder {
-    color: #5c6370;
+    color: ${Colors.text.placeholder};
   }
 
   &:focus {
