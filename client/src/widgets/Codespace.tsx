@@ -1,5 +1,5 @@
 import { useState, useRef, KeyboardEvent } from "react";
-import { Colors } from "../shared/color";
+import { Colors } from "../shared/Color";
 import styled from "styled-components";
 import { highlight, languages } from "prismjs";
 import "prismjs/components/prism-typescript";
@@ -7,7 +7,7 @@ import "prismjs/components/prism-javascript";
 
 const CodespaceContainer = styled.div`
   width: 95%;
-  min-height: 300px;
+  min-height: 500px;
   position: relative;
   background-color: ${Colors.background.primary};
   border-radius: 4px;

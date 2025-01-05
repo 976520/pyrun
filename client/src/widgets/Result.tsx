@@ -2,9 +2,11 @@ import styled from "styled-components";
 import { Colors } from "../shared/color";
 
 const ResultOutput = styled.div`
-  width: 97%;
-  min-height: 200px;
+  width: 100%;
+  height: 50%;
+  min-height: 300px;
   padding: 12px;
+  margin: 20px -20px;
   font-family: monospace;
   font-size: 14px;
   line-height: 1.5;

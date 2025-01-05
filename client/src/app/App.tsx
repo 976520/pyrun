@@ -1,20 +1,22 @@
 import { useState } from "react";
-import Codespace from "./widgets/Codespace";
-import Button from "./widgets/Button";
-import Result from "./widgets/Result";
-import LanguageSelect, { Language } from "./widgets/LanguageSelect";
-import { executeCode } from "./service/Code";
+import Codespace from "../widgets/Codespace";
+import Button from "../widgets/Button";
+import Result from "../widgets/Result";
+import LanguageSelect, { Language } from "../widgets/LanguageSelect";
+import { executeCode } from "../service/Code";
 import styled from "styled-components";
-import { Colors } from "./shared/color";
+import { Colors } from "../shared/color";
+import "./Global.css";
 
 const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
-  max-width: 900px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 32px 20px;
-  min-height: 100vh;
+  height: 90vh;
+  box-sizing: border-box;
   background-color: ${Colors.background.darkened};
 `;
 
@@ -33,16 +35,33 @@ const Controls = styled.div`
 
 const MainContent = styled.main`
   display: flex;
-  flex-direction: column;
   gap: 24px;
   flex: 1;
+
+  @media (max-width: 1280px) {
+    flex-direction: column;
+  }
+`;
+
+const CodeSection = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const ResultSection = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
 `;
 
 const ActionBar = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 8px;
 `;
 
 export default function App() {
@@ -75,13 +94,17 @@ export default function App() {
         </Controls>
       </Header>
       <MainContent>
-        <Codespace value={code} onChange={setCode} />
-        <ActionBar>
-          <Button onClick={handleExecute} disabled={isLoading} variant="primary">
-            {isLoading ? "실행 중..." : "실행"}
-          </Button>
-        </ActionBar>
-        <Result output={output} />
+        <CodeSection>
+          <Codespace value={code} onChange={setCode} />
+          <ActionBar>
+            <Button onClick={handleExecute} disabled={isLoading} variant="primary">
+              {isLoading ? "실행 중..." : "실행"}
+            </Button>
+          </ActionBar>
+        </CodeSection>
+        <ResultSection>
+          <Result output={output} />
+        </ResultSection>
       </MainContent>
     </AppContainer>
   );
