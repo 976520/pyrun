@@ -1,4 +1,5 @@
 import { Language } from "../widgets/LanguageSelect";
+import axios from "axios";
 
 interface ExecuteResponse {
   output: string;
@@ -7,25 +8,17 @@ interface ExecuteResponse {
 
 export const executeCode = async (code: string, language: Language): Promise<ExecuteResponse> => {
   try {
-    const response: Response = await fetch("http://localhost:8000/api/execute", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ code, language }),
+    const response = await axios.post<ExecuteResponse>("http://localhost:8000/api/execute", {
+      code,
+      language,
     });
     console.log(`${code} \n ${language}`);
 
-    if (!response.ok) {
-      throw new Error(response.statusText);
-    }
-
-    const result: ExecuteResponse = await response.json();
-    return result;
+    return response.data;
   } catch (error: unknown) {
     return {
       output: "",
-      error: error instanceof Error ? error.message : "Unknown error occurred",
+      error: axios.isAxiosError(error) ? error.message : "?",
     };
   }
 };
