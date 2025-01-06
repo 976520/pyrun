@@ -5,9 +5,9 @@ interface ExecuteResponse {
   error?: string;
 }
 
-export async function executeCode(code: string, language: Language): Promise<ExecuteResponse> {
+export const executeCode = async (code: string, language: Language): Promise<ExecuteResponse> => {
   try {
-    const response = await fetch("http://localhost:8000/api/execute", {
+    const response: Response = await fetch("http://localhost:8000/api/execute", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -20,11 +20,12 @@ export async function executeCode(code: string, language: Language): Promise<Exe
       throw new Error(response.statusText);
     }
 
-    return await response.json();
-  } catch (error) {
+    const result: ExecuteResponse = await response.json();
+    return result;
+  } catch (error: unknown) {
     return {
       output: "",
       error: error instanceof Error ? error.message : "Unknown error occurred",
     };
   }
-}
+};
