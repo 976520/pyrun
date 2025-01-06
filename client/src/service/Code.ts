@@ -14,11 +14,11 @@ export async function executeCode(code: string, language: Language): Promise<Exe
       },
       body: JSON.stringify({ code, language }),
     });
+    console.log(`${code} \n ${language}`);
 
     if (!response.ok) {
       throw new Error(response.statusText);
     }
-    // 코드 컴파일 실패 한 경우 = 400
 
     return await response.json();
   } catch (error) {

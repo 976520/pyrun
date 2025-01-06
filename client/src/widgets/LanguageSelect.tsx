@@ -8,7 +8,7 @@ import { TypescriptIcon } from "../shared/TypescriptIcon";
 import { CppIcon } from "../shared/CppIcon";
 import { JavascriptIcon } from "../shared/JavascriptIcon";
 
-export type Language = "python" | "c" | "java" | "kotlin" | "typescript" | "cpp" | "javascript";
+export type Language = "c" | "cpp" | "python" | "java" | "kotlin" | "javascript" | "typescript";
 
 const Container = styled.div`
   display: flex;
