@@ -1,4 +1,4 @@
-import { Language } from "../widgets/LanguageSelect";
+import { Language } from "../features/LanguageSelect";
 import axios from "axios";
 
 interface ExecuteResponse {

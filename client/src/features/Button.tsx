@@ -1,5 +1,5 @@
-import styled from "styled-components";
 import { Colors } from "../shared/Color";
+import styled from "styled-components";
 
 interface ButtonProps {
   children: React.ReactNode;
