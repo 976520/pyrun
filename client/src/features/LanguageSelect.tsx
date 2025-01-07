@@ -10,7 +10,16 @@ import { JavascriptIcon } from "../shared/JavascriptIcon";
 
 export type Language = "c" | "cpp" | "python" | "java" | "kotlin" | "javascript" | "typescript";
 
-const Container = styled.div`
+interface ContainerProps {
+  children: React.ReactNode;
+}
+
+interface LanguageButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  active: boolean;
+  children: React.ReactNode;
+}
+
+const Container = styled.div<ContainerProps>`
   display: flex;
   background-color: ${Colors.background.secondary};
   border-radius: 8px;
@@ -18,7 +27,7 @@ const Container = styled.div`
   gap: 4px;
 `;
 
-const LanguageButton = styled.button<{ active: boolean }>`
+const LanguageButton = styled.button<LanguageButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,11 +35,11 @@ const LanguageButton = styled.button<{ active: boolean }>`
   border-radius: 6px;
   border: none;
   cursor: pointer;
-  background-color: ${(props) => (props.active ? Colors.background.darkened : "transparent")};
+  background-color: ${({ active }) => (active ? Colors.background.darkened : "transparent")};
   transition: all 0.2s ease;
 
   svg {
-    opacity: ${(props) => (props.active ? 1 : 0.5)};
+    opacity: ${({ active }) => (active ? 1 : 0.5)};
     width: 24px;
     height: 24px;
   }
@@ -48,30 +57,36 @@ interface LanguageSelectProps {
   onChange: (language: Language) => void;
 }
 
-export default function LanguageSelect({ value, onChange }: LanguageSelectProps) {
+const LanguageSelect: React.FC<LanguageSelectProps> = ({ value, onChange }) => {
+  const handleLanguageChange = (language: Language): void => {
+    onChange(language);
+  };
+
   return (
     <Container>
-      <LanguageButton active={value === "c"} onClick={() => onChange("c")}>
+      <LanguageButton active={value === "c"} onClick={() => handleLanguageChange("c")}>
         <CIcon />
       </LanguageButton>
-      <LanguageButton active={value === "cpp"} onClick={() => onChange("cpp")}>
+      <LanguageButton active={value === "cpp"} onClick={() => handleLanguageChange("cpp")}>
         <CppIcon />
       </LanguageButton>
-      <LanguageButton active={value === "python"} onClick={() => onChange("python")}>
+      <LanguageButton active={value === "python"} onClick={() => handleLanguageChange("python")}>
         <PythonIcon />
       </LanguageButton>
-      <LanguageButton active={value === "java"} onClick={() => onChange("java")}>
+      <LanguageButton active={value === "java"} onClick={() => handleLanguageChange("java")}>
         <JavaIcon />
       </LanguageButton>
-      <LanguageButton active={value === "kotlin"} onClick={() => onChange("kotlin")}>
+      <LanguageButton active={value === "kotlin"} onClick={() => handleLanguageChange("kotlin")}>
         <KotlinIcon />
       </LanguageButton>
-      <LanguageButton active={value === "javascript"} onClick={() => onChange("javascript")}>
+      <LanguageButton active={value === "javascript"} onClick={() => handleLanguageChange("javascript")}>
         <JavascriptIcon />
       </LanguageButton>
-      <LanguageButton active={value === "typescript"} onClick={() => onChange("typescript")}>
+      <LanguageButton active={value === "typescript"} onClick={() => handleLanguageChange("typescript")}>
         <TypescriptIcon />
       </LanguageButton>
     </Container>
   );
-}
+};
+
+export default LanguageSelect;
