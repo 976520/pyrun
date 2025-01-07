@@ -1,3 +1,4 @@
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { Colors } from "../shared/Color";
 import { PythonIcon } from "../shared/PythonIcon";
@@ -7,6 +8,9 @@ import { KotlinIcon } from "../shared/KotlinIcon";
 import { TypescriptIcon } from "../shared/TypescriptIcon";
 import { CppIcon } from "../shared/CppIcon";
 import { JavascriptIcon } from "../shared/JavascriptIcon";
+import LanguageSelectButton from "./LanguageSelectButton";
+import { RootState } from "../store/store";
+import { setLanguage } from "../store/codeSlice";
 
 export type Language = "c" | "cpp" | "python" | "java" | "kotlin" | "javascript" | "typescript";
 
@@ -14,12 +18,7 @@ interface ContainerProps {
   children: React.ReactNode;
 }
 
-interface LanguageButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  active: boolean;
-  children: React.ReactNode;
-}
-
-const Container = styled.div<ContainerProps>`
+const LanguageSelectContainer = styled.div<ContainerProps>`
   display: flex;
   background-color: ${Colors.background.secondary};
   border-radius: 8px;
@@ -27,65 +26,38 @@ const Container = styled.div<ContainerProps>`
   gap: 4px;
 `;
 
-const LanguageButton = styled.button<LanguageButtonProps>`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  background-color: ${({ active }) => (active ? Colors.background.darkened : "transparent")};
-  transition: all 0.2s ease;
+const LanguageSelect: React.FC = () => {
+  const dispatch = useDispatch();
+  const language = useSelector((state: RootState) => state.code.language);
 
-  svg {
-    opacity: ${({ active }) => (active ? 1 : 0.5)};
-    width: 24px;
-    height: 24px;
-  }
-
-  &:hover {
-    background-color: ${Colors.background.darkened};
-    svg {
-      opacity: 0.8;
-    }
-  }
-`;
-
-interface LanguageSelectProps {
-  value: Language;
-  onChange: (language: Language) => void;
-}
-
-const LanguageSelect: React.FC<LanguageSelectProps> = ({ value, onChange }) => {
-  const handleLanguageChange = (language: Language): void => {
-    onChange(language);
+  const handleLanguageChange = (newLanguage: Language) => {
+    dispatch(setLanguage(newLanguage));
   };
 
   return (
-    <Container>
-      <LanguageButton active={value === "c"} onClick={() => handleLanguageChange("c")}>
+    <LanguageSelectContainer>
+      <LanguageSelectButton active={language === "c"} onClick={() => handleLanguageChange("c")}>
         <CIcon />
-      </LanguageButton>
-      <LanguageButton active={value === "cpp"} onClick={() => handleLanguageChange("cpp")}>
+      </LanguageSelectButton>
+      <LanguageSelectButton active={language === "cpp"} onClick={() => handleLanguageChange("cpp")}>
         <CppIcon />
-      </LanguageButton>
-      <LanguageButton active={value === "python"} onClick={() => handleLanguageChange("python")}>
+      </LanguageSelectButton>
+      <LanguageSelectButton active={language === "python"} onClick={() => handleLanguageChange("python")}>
         <PythonIcon />
-      </LanguageButton>
-      <LanguageButton active={value === "java"} onClick={() => handleLanguageChange("java")}>
+      </LanguageSelectButton>
+      <LanguageSelectButton active={language === "java"} onClick={() => handleLanguageChange("java")}>
         <JavaIcon />
-      </LanguageButton>
-      <LanguageButton active={value === "kotlin"} onClick={() => handleLanguageChange("kotlin")}>
+      </LanguageSelectButton>
+      <LanguageSelectButton active={language === "kotlin"} onClick={() => handleLanguageChange("kotlin")}>
         <KotlinIcon />
-      </LanguageButton>
-      <LanguageButton active={value === "javascript"} onClick={() => handleLanguageChange("javascript")}>
+      </LanguageSelectButton>
+      <LanguageSelectButton active={language === "javascript"} onClick={() => handleLanguageChange("javascript")}>
         <JavascriptIcon />
-      </LanguageButton>
-      <LanguageButton active={value === "typescript"} onClick={() => handleLanguageChange("typescript")}>
+      </LanguageSelectButton>
+      <LanguageSelectButton active={language === "typescript"} onClick={() => handleLanguageChange("typescript")}>
         <TypescriptIcon />
-      </LanguageButton>
-    </Container>
+      </LanguageSelectButton>
+    </LanguageSelectContainer>
   );
 };
 

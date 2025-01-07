@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Codespace from "../features/Codespace";
 import Button from "../features/Button";
 import Result from "../features/Result";
 import { executeCode } from "../service/Code";
 import styled from "styled-components";
 import "../app/Global.css";
-import { Language } from "../features/LanguageSelect";
+import { RootState } from "../store/store";
+import { setCode, setOutput, setIsLoading } from "../store/codeSlice";
 
 const ContentContainer = styled.main`
   display: flex;
@@ -39,24 +40,26 @@ const ActionBar = styled.div`
 `;
 
 export default function Content() {
-  const [code, setCode] = useState("");
-  const [output, setOutput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [language, setLanguage] = useState<Language>("python");
+  const dispatch = useDispatch();
+  const { code, output, language, isLoading } = useSelector((state: RootState) => state.code);
+
+  const handleCodeChange = (newCode: string) => {
+    dispatch(setCode(newCode));
+  };
 
   const handleExecute = async () => {
-    setIsLoading(true);
+    dispatch(setIsLoading(true));
     try {
       const result = await executeCode(code, language);
       if (result.error) {
-        setOutput(result.error);
+        dispatch(setOutput(result.error));
       } else {
-        setOutput(result.output);
+        dispatch(setOutput(result.output));
       }
     } catch (error) {
-      setOutput(error instanceof Error ? error.message : "ㅗ");
+      dispatch(setOutput(error instanceof Error ? error.message : "ㅗ"));
     } finally {
-      setIsLoading(false);
+      dispatch(setIsLoading(false));
     }
   };
 
@@ -64,7 +67,7 @@ export default function Content() {
     <>
       <ContentContainer>
         <CodeSection>
-          <Codespace value={code} onChange={setCode} />
+          <Codespace value={code} onChange={handleCodeChange} />
           <ActionBar>
             <Button onClick={handleExecute} disabled={isLoading} variant="primary">
               {isLoading ? "실행 중..." : "실행"}
