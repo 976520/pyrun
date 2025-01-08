@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { highlight, languages } from "prismjs";
 import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-javascript";
+import LineNumbers from "./LineNumbers";
 
 const CodespaceContainer = styled.div`
   width: 95%;
@@ -14,33 +15,6 @@ const CodespaceContainer = styled.div`
   padding: 0;
   margin: 20px auto;
   overflow: hidden;
-`;
-
-const LineNumbers = styled.div`
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  bottom: 0px;
-  width: 40px;
-  padding: 12px 10px;
-  background-color: ${Colors.background.secondary};
-  border-right: 1px solid ${Colors.border.primary};
-  color: ${Colors.text.secondary};
-  font-family: monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  text-align: right;
-  user-select: none;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  overflow: hidden;
-`;
-
-const LineNumbersContent = styled.div`
-  position: absolute;
-  top: 12px;
-  right: 10px;
-  left: 10px;
 `;
 
 const CommonCodeStyles = () => `
@@ -127,14 +101,8 @@ export default function Codespace({ value = "", onChange }: CodespaceProps) {
   const syncScroll = (e: React.UIEvent<HTMLElement>) => {
     const target = e.target as HTMLElement;
     if (textareaRef.current && displayRef.current) {
-      if (target === textareaRef.current) {
+      if (target === textareaRef.current || target === displayRef.current) {
         displayRef.current.scrollTop = target.scrollTop;
-        const lineNumbers = document.querySelector<HTMLElement>(".line-numbers-content");
-        if (lineNumbers) {
-          lineNumbers.style.transform = `translateY(-${target.scrollTop}px)`;
-        }
-      } else if (target === displayRef.current) {
-        textareaRef.current.scrollTop = target.scrollTop;
         const lineNumbers = document.querySelector<HTMLElement>(".line-numbers-content");
         if (lineNumbers) {
           lineNumbers.style.transform = `translateY(-${target.scrollTop}px)`;
@@ -167,20 +135,13 @@ export default function Codespace({ value = "", onChange }: CodespaceProps) {
     }
   };
 
-  const renderLineNumbers = () => {
-    const lines = code.split("\n").length;
-    return Array.from({ length: lines }, (_, i) => <div key={i + 1}>{i + 1}</div>);
-  };
-
   const highlightCode = (code: string) => {
     return highlight(code, languages.typescript, "typescript");
   };
 
   return (
     <CodespaceContainer>
-      <LineNumbers>
-        <LineNumbersContent className="line-numbers-content">{renderLineNumbers()}</LineNumbersContent>
-      </LineNumbers>
+      <LineNumbers code={code} />
       <CodeInput
         ref={textareaRef}
         value={code}

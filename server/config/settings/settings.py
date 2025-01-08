@@ -126,9 +126,7 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# 개발 환경에서 CORS 허용
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
-# CSRF 설정
 CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']

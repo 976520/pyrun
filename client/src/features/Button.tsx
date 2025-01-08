@@ -1,14 +1,14 @@
 import { Colors } from "../shared/Color";
 import styled from "styled-components";
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
   variant?: "primary" | "secondary";
 }
 
-const StyledButton = styled.button<Pick<ButtonProps, "variant">>`
+const ButtonView = styled.button<Pick<ButtonProps, "variant">>`
   padding: 8px 16px;
   border-radius: 4px;
   font-size: 14px;
@@ -44,8 +44,8 @@ const StyledButton = styled.button<Pick<ButtonProps, "variant">>`
 
 export default function Button({ children, onClick, disabled, variant }: ButtonProps) {
   return (
-    <StyledButton onClick={onClick} disabled={disabled} variant={variant}>
+    <ButtonView onClick={onClick} disabled={disabled} variant={variant}>
       {children}
-    </StyledButton>
+    </ButtonView>
   );
 }
