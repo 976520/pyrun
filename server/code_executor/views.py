@@ -101,7 +101,7 @@ def execute_java(code):
                 capture_output=True,
                 text=True
             )
-                
+
             if compile_process.returncode != 0:
                 return Response({
                     'output': '',
