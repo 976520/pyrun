@@ -15,18 +15,19 @@ RUN apt-get update && apt-get install -y \
 RUN curl -s https://get.sdkman.io | bash \
     && bash -c "source $HOME/.sdkman/bin/sdkman-init.sh && sdk install kotlin"
 
-# 파이ㅏ썬 환변
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-#장고서버
 ENV DJANGO_SETTINGS_MODULE=config.settings.settings
+ENV DJANGO_WSGI_MODULE=config.wsgi
 
 COPY server/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY server/ .
 
+RUN python manage.py collectstatic --noinput
+
 EXPOSE 8000
 
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "3", "--threads", "2", "config.wsgi:application"]
     

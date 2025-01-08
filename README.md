@@ -12,13 +12,23 @@ pip install -r requirements.txt
 source .venv/Scripts/activate
 ```
 
-로 가상환경 키고
+로 가상환경 키고 나서
 
 ```shell
 python manage.py runserver
 ```
 
-로 서버 ㄱㄱ헛
+로 로컬에서 열거나
+
+```shell
+docker build -t code-executor .
+```
+
+```shell
+docker run -d -p 8000:8000 -e DJANGO_SETTINGS_MODULE=config.settings.production --name code-executor code-executor
+```
+
+로 도커에서 ㄱㄱ헛
 
 ## client 에서
 
