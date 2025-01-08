@@ -9,7 +9,7 @@ pip install -r requirements.txt
 로 패키지 깔고
 
 ```shell
-source .venv/Scripts/activate
+source venv/Scripts/activate
 ```
 
 로 가상환경 키고 나서
@@ -24,7 +24,7 @@ python manage.py runserver
 docker build -t code-executor .
 ```
 
-```shell
+```shellcd
 docker run -d -p 8000:8000 -e DJANGO_SETTINGS_MODULE=config.settings.production --name code-executor code-executor
 ```
 

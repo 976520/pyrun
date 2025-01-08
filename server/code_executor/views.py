@@ -168,30 +168,29 @@ def execute_kotlin(code):
 
 def execute_typescript(code):
     with tempfile.TemporaryDirectory() as tmp_dir:
-        if language == 'javascript':
-            js_path = os.path.join(tmp_dir, 'main.js')
-            with open(js_path, 'w') as f:
-                f.write(code)
-            
-            try:
-                run_process = subprocess.run(
-                    ['node', js_path],
-                    capture_output=True,
-                    text=True,
-                    timeout=5
-                )
-                
-                return Response({
-                    'output': run_process.stdout,
-                    'error': run_process.stderr if run_process.returncode != 0 else None
-                })
-                
-            except subprocess.TimeoutExpired:
-                return Response({
-                    'output': '',
-                    'error': 'Execution timed out'
-                }, status=408)
+        js_path = os.path.join(tmp_dir, 'main.js')
+        with open(js_path, 'w') as f:
+            f.write(code)
         
+        try:
+            run_process = subprocess.run(
+                ['node', js_path],
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            
+            return Response({
+                'output': run_process.stdout,
+                'error': run_process.stderr if run_process.returncode != 0 else None
+            })
+            
+        except subprocess.TimeoutExpired:
+            return Response({
+                'output': '',
+                'error': 'Execution timed out'
+            }, status=408)
+    
         src_path = os.path.join(tmp_dir, 'main.ts')
         with open(src_path, 'w') as f:
             f.write(code)
