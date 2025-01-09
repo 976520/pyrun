@@ -22,14 +22,16 @@ def execute_code(request):
         return execute_java(code)
     elif language == 'kotlin':
         return execute_kotlin(code)
-    elif language in ['typescript', 'javascript']:
+    elif language == 'typescript':
         return execute_typescript(code)
+    elif language == 'javascript':
+        return execute_javascript(code)
     elif language == 'cpp':
         return execute_cpp(code)
     else:
         return Response({
             'output': '',
-            'error': f'Unsupported language: {language}'
+            'error': f'{language}는 지원하지 않는 언어입니다 ㅠㅠ'
         }, status=400)
 
 def execute_python(code):
@@ -83,7 +85,7 @@ def execute_c(code):
         except subprocess.TimeoutExpired:
             return Response({
                 'output': '',
-                'error': 'Execution timed out'
+                'error': '시간 초과'
             }, status=408)
 
 def execute_java(code):
@@ -123,7 +125,7 @@ def execute_java(code):
         except subprocess.TimeoutExpired:
             return Response({
                 'output': '',
-                'error': 'Execution timed out'
+                'error': '시간 초과'
             }, status=408)  
 
 def execute_kotlin(code):
@@ -163,18 +165,18 @@ def execute_kotlin(code):
         except subprocess.TimeoutExpired:
             return Response({
                 'output': '',
-                'error': 'Execution timed out'
+                'error': '시간 초과'
             }, status=408)
 
-def execute_typescript(code):
+def execute_javascript(code):
     with tempfile.TemporaryDirectory() as tmp_dir:
-        js_path = os.path.join(tmp_dir, 'main.js')
-        with open(js_path, 'w') as f:
+        src_path = os.path.join(tmp_dir, 'main.js')
+        with open(src_path, 'w') as f:
             f.write(code)
         
         try:
             run_process = subprocess.run(
-                ['node', js_path],
+                ['node', src_path],
                 capture_output=True,
                 text=True,
                 timeout=5
@@ -188,9 +190,11 @@ def execute_typescript(code):
         except subprocess.TimeoutExpired:
             return Response({
                 'output': '',
-                'error': 'Execution timed out'
+                'error': '시간 초과'
             }, status=408)
-    
+            
+def execute_typescript(code):
+    with tempfile.TemporaryDirectory() as tmp_dir:
         src_path = os.path.join(tmp_dir, 'main.ts')
         with open(src_path, 'w') as f:
             f.write(code)
@@ -207,7 +211,8 @@ def execute_typescript(code):
                     'output': '',
                     'error': compile_process.stderr
                 }, status=400)
-            
+
+        
             run_process = subprocess.run(
                 ['node', os.path.join(tmp_dir, 'main.js')],
                 capture_output=True,
@@ -223,7 +228,7 @@ def execute_typescript(code):
         except subprocess.TimeoutExpired:
             return Response({
                 'output': '',
-                'error': 'Execution timed out'
+                'error': '시간 초과'
             }, status=408)
 
 def execute_cpp(code):
@@ -262,5 +267,5 @@ def execute_cpp(code):
         except subprocess.TimeoutExpired:
             return Response({
                 'output': '',
-                'error': 'Execution timed out'
+                'error': '시간 초과'
             }, status=408)
