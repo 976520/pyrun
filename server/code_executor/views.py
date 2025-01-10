@@ -25,7 +25,7 @@ def execute_code(request):
     elif language == 'typescript':
         return execute_typescript(code)
     elif language == 'javascript':
-        return execute_javascript(code)
+        return execute_javascript(code) 
     elif language == 'cpp':
         return execute_cpp(code)
     else:
